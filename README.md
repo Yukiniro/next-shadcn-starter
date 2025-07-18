@@ -12,51 +12,31 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## State Management with Jotai
 
-This project demonstrates various Jotai patterns:
+This project demonstrates a simple counter using Jotai for state management:
 
-### Basic Atoms
 ```typescript
 import { atom } from 'jotai'
 
 // Basic counter state
 export const countAtom = atom(0)
-
-// Theme state
-export const themeAtom = atom<'light' | 'dark'>('light')
 ```
 
-### Derived Atoms
+Usage in components:
 ```typescript
-// Read-only derived atom
-export const doubleCountAtom = atom((get) => get(countAtom) * 2)
+import { useAtom } from 'jotai'
+import { countAtom } from '@/lib/atoms'
 
-// Writable derived atom
-export const countOperationsAtom = atom(
-  (get) => get(countAtom),
-  (get, set, operation: 'increment' | 'decrement' | 'reset') => {
-    const currentCount = get(countAtom)
-    switch (operation) {
-      case 'increment':
-        set(countAtom, currentCount + 1)
-        break
-      case 'decrement':
-        set(countAtom, currentCount - 1)
-        break
-      case 'reset':
-        set(countAtom, 0)
-        break
-    }
-  }
-)
-```
-
-### Async Atoms
-```typescript
-// Async data fetching
-export const asyncDataAtom = atom(async () => {
-  const response = await fetch('/api/data')
-  return response.json()
-})
+function Counter() {
+  const [count, setCount] = useAtom(countAtom)
+  
+  return (
+    <div>
+      <p>Count: {count}</p>
+      <button onClick={() => setCount(count + 1)}>+</button>
+      <button onClick={() => setCount(count - 1)}>-</button>
+    </div>
+  )
+}
 ```
 
 ## Getting Started
@@ -77,17 +57,15 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
 ## Project Structure
 
 ```
 src/
 ├── app/                 # Next.js App Router
+│   ├── page.tsx        # Main page with counter
+│   └── layout.tsx      # Root layout
 ├── components/          # Reusable UI components
-│   ├── ui/             # Shadcn/ui components
-│   ├── counter.tsx     # Counter component demo
-│   └── jotai-demo.tsx  # Jotai features demo
+│   └── ui/             # Shadcn/ui components
 ├── lib/                # Utilities and configurations
 │   ├── atoms.ts        # Jotai atoms definitions
 │   └── utils.ts        # Utility functions
