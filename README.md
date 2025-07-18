@@ -1,4 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js Shadcn Starter with Jotai
+
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app), enhanced with [Shadcn/ui](https://ui.shadcn.com/) components and [Jotai](https://jotai.org/) for state management.
+
+## Features
+
+- 🚀 **Next.js 15** with App Router
+- 💎 **TypeScript** for type safety
+- 🎨 **Shadcn/ui** components with Tailwind CSS
+- 🔄 **Jotai** for atomic state management
+- 📱 **Responsive design** with mobile-first approach
+
+## State Management with Jotai
+
+This project demonstrates various Jotai patterns:
+
+### Basic Atoms
+```typescript
+import { atom } from 'jotai'
+
+// Basic counter state
+export const countAtom = atom(0)
+
+// Theme state
+export const themeAtom = atom<'light' | 'dark'>('light')
+```
+
+### Derived Atoms
+```typescript
+// Read-only derived atom
+export const doubleCountAtom = atom((get) => get(countAtom) * 2)
+
+// Writable derived atom
+export const countOperationsAtom = atom(
+  (get) => get(countAtom),
+  (get, set, operation: 'increment' | 'decrement' | 'reset') => {
+    const currentCount = get(countAtom)
+    switch (operation) {
+      case 'increment':
+        set(countAtom, currentCount + 1)
+        break
+      case 'decrement':
+        set(countAtom, currentCount - 1)
+        break
+      case 'reset':
+        set(countAtom, 0)
+        break
+    }
+  }
+)
+```
+
+### Async Atoms
+```typescript
+// Async data fetching
+export const asyncDataAtom = atom(async () => {
+  const response = await fetch('/api/data')
+  return response.json()
+})
+```
 
 ## Getting Started
 
@@ -20,14 +79,29 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Project Structure
+
+```
+src/
+├── app/                 # Next.js App Router
+├── components/          # Reusable UI components
+│   ├── ui/             # Shadcn/ui components
+│   ├── counter.tsx     # Counter component demo
+│   └── jotai-demo.tsx  # Jotai features demo
+├── lib/                # Utilities and configurations
+│   ├── atoms.ts        # Jotai atoms definitions
+│   └── utils.ts        # Utility functions
+└── types/              # TypeScript type definitions
+```
+
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+To learn more about the technologies used in this project:
 
 - [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [Shadcn/ui Documentation](https://ui.shadcn.com/) - learn about the UI components.
+- [Jotai Documentation](https://jotai.org/) - learn about atomic state management.
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs) - learn about utility-first CSS.
 
 ## Deploy on Vercel
 
